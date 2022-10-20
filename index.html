@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>ShareFile</title>
+</head>
+<body>
+    <input type="hidden" name="currentIp" id="current-ip" value="connectedok">
+    <div class="area-msg"></div>
+    <input type="text" name="message" id="message" value="Hi There!">
+    <script>
+        $(document).ready(function() {
+            
+            var peer = new Peer();
+
+            var conn = peer.connect($(".current-ip").val());
+            // on open will be launch when you successfully connect to PeerServer
+            conn.on('open', function() {
+                // here you have conn.id
+                conn.send($("#message").val());
+            });
+
+            peer.on('connection', function(conn) {
+                conn.on('data', function(data) {
+                    $(".area-msg").text(data);
+                });
+            });
+        })
+    </script>
+</body>
+</html>
